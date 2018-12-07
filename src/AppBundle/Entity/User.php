@@ -1,132 +1,89 @@
 <?php
+// src/AppBundle/Entity/User.php
 
 namespace AppBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use FOS\UserBundle\Model\User as BaseUser;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * User
- *
- * @ORM\Table(name="user")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\UserRepository")
+ * @ORM\Entity
+ * @ORM\Table(name="fos_user")
  */
-class User
+class User extends BaseUser
 {
     /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer")
      * @ORM\Id
+     * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="username", type="string", length=255)
-     * @Assert\NotBlank()
+     * @ORM\OneToMany(targetEntity="Cart", mappedBy="user")
      */
-    private $username;
+    private $products;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="password", type="string", length=255)
-     * @Assert\NotBlank()
+     * @ORM\OneToMany(targetEntity="Orders", mappedBy="user")
      */
-    private $password;
+    private $orders;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="email", type="string", length=255)
-     * @Assert\NotBlank()
-     */
-    private $email;
-
-
-    /**
-     * Get id
-     *
-     * @return int
-     */
-    public function getId()
+    public function __construct()
     {
-        return $this->id;
+        parent::__construct();
+
+        $this->products = new ArrayCollection();
+        $this->orders = new ArrayCollection();
     }
 
-    /**
-     * Set username
-     *
-     * @param string $username
-     *
-     * @return User
-     */
-    public function setUsername($username)
+    public function getProducts()
     {
-        $this->username = $username;
+        return $this->products;
+    }
+
+    public function addProduct(Cart $product)
+    {
+        if($this->products->contains($product)) {
+            return $this;
+        }
+
+        $this->products->add($product);
 
         return $this;
     }
 
-    /**
-     * Get username
-     *
-     * @return string
-     */
-    public function getUsername()
+    public function removeProduct(Cart $product)
     {
-        return $this->username;
-    }
+        if(!$this->products->contains($product)) {
+            return $this;
+        }
 
-    /**
-     * Set password
-     *
-     * @param string $password
-     *
-     * @return User
-     */
-    public function setPassword($password)
-    {
-        $this->password = $password;
+        $this->products->removeElement($product);
 
         return $this;
     }
 
-    /**
-     * Get password
-     *
-     * @return string
-     */
-    public function getPassword()
+    public function addOrder(Orders $order)
     {
-        return $this->password;
-    }
+        if($this->orders->contains($order)) {
+            return $this;
+        }
 
-    /**
-     * Set email
-     *
-     * @param string $email
-     *
-     * @return User
-     */
-    public function setEmail($email)
-    {
-        $this->email = $email;
+        $this->orders->add($order);
 
         return $this;
     }
 
-    /**
-     * Get email
-     *
-     * @return string
-     */
-    public function getEmail()
+    public function removeOrder(Orders $order)
     {
-        return $this->email;
+        if(!$this->orders->contains($order)) {
+            return $this;
+        }
+
+        $this->orders->removeElement($order);
+
+        return $this;
     }
 }
-

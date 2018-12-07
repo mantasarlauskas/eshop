@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container-fluid">
+        <h2 class="text-center page-title">Užsakymai</h2>
+        {% if orders|length == 0 %}
+            <p>Užsakymų kol kas nėra</p>
+        {% else %}
+            <table class="table">
+                <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Data</th>
+                    <th scope="col">Statusas</th>
+                </tr>
+                </thead>
+                {% for order in orders %}
+                    <tr>
+                        <th scope="row">{{ loop.index }}</th>
+                        <td>{{ order.dateTime|date('Y-m-d') }}</td>
+                        <td>
+                            {% if order.isConfirmed == true %}
+                                Patvirtintas
+                            {% else %}
+                                Nepatvirtintas
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+        {% endif %}
+    </div>
+{% endblock %}

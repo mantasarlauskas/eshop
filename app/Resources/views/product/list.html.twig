@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container-fluid">
+        {% for message in app.flashes('create_product') %}
+            <div class="alert alert-success">
+                {{ message }}
+            </div>
+        {% endfor %}
+        <h2 class="text-center page-title">Prekių sąrašas</h2>
+        <a class="btn btn-primary add-button" href="{{ path('product.add') }}">
+            Pridėti prekę
+        </a>
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Pavadinimas</th>
+                <th scope="col">Kaina</th>
+                <th scope="col">Likes kiekis</th>
+                <th scope="col">Pridėti į krepšelį</th>
+            </tr>
+            </thead>
+            {% for product in products %}
+                <tr>
+                    <th scope="row">{{ loop.index }}</th>
+                    <td>{{ product.name }}</td>
+                    <td>{{ product.price }}</td>
+                    <td>{{ product.count }}</td>
+                    <td>
+                        {% if product.count > 0 %}
+                            <a href="{{ path('product.cart', {'id': product.id}) }}">
+                                <i class="fa fa-cart-plus" aria-hidden="true"></i>
+                            </a>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+{% endblock %}

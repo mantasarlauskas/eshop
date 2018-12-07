@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container-fluid">
+        <h2 class="text-center page-title">Vartotojų sąrašas</h2>
+        <a class="btn btn-primary add-button" href="/user/add">
+            Pridėti vartotoją
+        </a>
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Vartotojo vardas</th>
+                <th scope="col">El. paštas</th>
+            </tr>
+            </thead>
+            {% for user in users %}
+                <tr>
+                    <th scope="row">{{ loop.index }}</th>
+                    <td>{{ user.username }}</td>
+                    <td>{{ user.email }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+{% endblock %}

@@ -15,7 +15,7 @@ class DefaultController extends Controller
      */
     public function indexAction(Request $request)
     {
-        $user = new User();
+        /*$user = new User();
         $form = $this->createForm(UserType::class, $user);
 
         $form->handleRequest($request);
@@ -35,11 +35,11 @@ class DefaultController extends Controller
             echo 'tinka';
         } else {
            echo 'netinka';
-        }
+        }*/
 
 
         return $this->render('default/index.html.twig', [
-            'form' => $form->createView(),
+           // 'form' => $form->createView(),
         ]);
     }
 }

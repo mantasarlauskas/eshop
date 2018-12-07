@@ -9,8 +9,7 @@
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
     </head>
     <body>
-    {% include 'auth/login.html.twig' %}
-    {% include 'menu.html.twig' %}
+    {% include 'menu/menu.html.twig' %}
     {% block body %}{% endblock %}
         {% block javascripts %}
             <script src="{{ asset('build/js/app.js') }}"></script>
