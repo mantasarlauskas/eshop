@@ -13,7 +13,9 @@
                     <th scope="col">Data</th>
                     <th scope="col">Statusas</th>
                     <th scope="col"></th>
-                    <th scope="col">Šalinti</th>
+                    {% if is_granted("ROLE_ADMIN") %}
+                        <th scope="col">Šalinti</th>
+                    {% endif %}
                 </tr>
                 </thead>
                 {% for order in orders %}
@@ -34,11 +36,13 @@
                                 Peržiūrėti
                             </a>
                         </td>
-                        <td>
-                            <a href="{{ path('order.remove', { 'id': order.id }) }}">
-                                <i class="fa fa-remove" aria-hidden="true"></i>
-                            </a>
-                        </td>
+                        {% if is_granted("ROLE_ADMIN") %}
+                            <td>
+                                <a href="{{ path('order.remove', { 'id': order.id }) }}">
+                                    <i class="fa fa-remove" aria-hidden="true"></i>
+                                </a>
+                            </td>
+                        {% endif %}
                     </tr>
                 {% endfor %}
             </table>

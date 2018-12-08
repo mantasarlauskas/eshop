@@ -1,13 +1,13 @@
 {% trans_default_domain 'FOSUserBundle' %}
 
 <div class="auth-wrapper">
-    <h3 class="text-center">Mano profilis</h3>
-    <p>{{ 'profile.show.username'|trans }}: {{ user.username }}</p>
-    <p>{{ 'profile.show.email'|trans }}: {{ user.email }}</p>
-    <a class="btn btn-primary" href="/profile/edit">
+    <h3 class="text-center mb-5">Mano profilis</h3>
+    <p>Vardas: {{ user.username }}</p>
+    <p>El. paštas: {{ user.email }}</p>
+    <a class="btn btn-primary mt-3 mr-2" href="/profile/edit">
         Redaguoti
     </a>
-    <a class="btn btn-primary" href="/profile/change-password">
+    <a class="btn btn-primary mt-3" href="/profile/change-password">
         Keisti slaptažodį
     </a>
 </div>

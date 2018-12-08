@@ -12,6 +12,7 @@ namespace AppBundle\Controller;
 use AppBundle\Entity\Cart;
 use AppBundle\Entity\Orders;
 use AppBundle\Entity\Product;
+use AppBundle\Entity\Report;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
@@ -47,6 +48,15 @@ class OrderController extends Controller
 
         $entityManager = $this->getDoctrine()->getManager();
         $entityManager->persist($order);
+
+        $log = new Report();
+
+        $log->setUser($user);
+        $log->setDateTime();
+        $log->setText('Aktyvuotas užsakymas id:' . $order->getId());
+
+        $entityManager->persist($log);
+
         $entityManager->flush();
 
         return $this->redirectToRoute('order.all');
@@ -66,6 +76,39 @@ class OrderController extends Controller
 
         $entityManager = $this->getDoctrine()->getManager();
         $entityManager->persist($order);
+
+        $log = new Report();
+
+        $log->setUser($user);
+        $log->setDateTime();
+        $log->setText('Užbaigtas užsakymas id:' . $order->getId());
+
+        $entityManager->persist($log);
+
+        $entityManager->flush();
+
+        return $this->redirectToRoute('order.all');
+    }
+
+    /**
+     * @Route("/order/all/remove/{id}", name="order.all.remove")
+     * @param Orders $order
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     */
+    public function removeFromAll(Orders $order)
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->remove($order);
+
+        $log = new Report();
+
+        $log->setUser($this->getUser());
+        $log->setDateTime();
+        $log->setText('Pašalintas užsakymas id:' . $order->getId());
+
+        $entityManager->persist($log);
+
+
         $entityManager->flush();
 
         return $this->redirectToRoute('order.all');
@@ -101,6 +144,14 @@ class OrderController extends Controller
         $entityManager->persist($order);
         $entityManager->flush();
 
+        $log = new Report();
+
+        $log->setUser($user);
+        $log->setDateTime();
+        $log->setText('Sukurtas užsakymas id:' . $order->getId());
+
+        $entityManager->persist($log);
+
         $orderItems = $this->getDoctrine()->getRepository(Cart::class)
             ->findByUser($user->getId());
 
@@ -123,6 +174,16 @@ class OrderController extends Controller
     {
         $entityManager = $this->getDoctrine()->getManager();
         $entityManager->remove($order);
+
+        $log = new Report();
+
+        $log->setUser($this->getUser());
+        $log->setDateTime();
+        $log->setText('Pašalintas užsakymas id:' . $order->getId());
+
+        $entityManager->persist($log);
+
+
         $entityManager->flush();
 
         return $this->redirectToRoute('order.list');
@@ -138,6 +199,14 @@ class OrderController extends Controller
         $entityManager = $this->getDoctrine()->getManager();
 
         $order = $this->getDoctrine()->getRepository(Orders::class)->find($cart->getOrder());
+
+        $log = new Report();
+
+        $log->setUser($this->getUser());
+        $log->setDateTime();
+        $log->setText('Pakeistas užsakymas id:' . $order->getId());
+
+        $entityManager->persist($log);
 
         if ($cart->getCount() > 1) {
             $cart->decrementCount();
@@ -157,7 +226,16 @@ class OrderController extends Controller
             ->findBy(array('order' => $order->getId()));
         if(count($products) == 0) {
             $entityManager->remove($order);
+
+            $log = new Report();
+
+            $log->setUser($this->getUser());
+            $log->setDateTime();
+            $log->setText('Pašalintas užsakymas id:' . $order->getId());
+
+            $entityManager->persist($log);
             $entityManager->flush();
+
             return $this->redirectToRoute('order.list');
         }
 

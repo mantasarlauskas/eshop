@@ -6,9 +6,12 @@
         <div class="row justify-content-center">
             <div class="col-xs-12">
                 <div class="auth-wrapper">
-                    <h3 class="text-center">Prekės forma</h3>
+                    <h3 class="text-center mb-5">Prekės forma</h3>
                     {{ form_start(form) }}
                     {{ form_widget(form) }}
+                    <div class="text-center">
+                        <input class="btn btn-primary mt-3" type="submit" value="Patvirtinti" />
+                    </div>
                     {{ form_end(form) }}
                 </div>
             </div>

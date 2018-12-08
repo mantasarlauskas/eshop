@@ -24,26 +24,25 @@ class UserType extends AbstractType
             ->add('username', TextType::class, array(
                 'attr' => array(
                     'autocomplete' => 'off'
-                )
+                ),
+                'label' => 'Vartotojo vardas'
             ))
             ->add('email', EmailType::class, array(
                 'attr' => array(
                     'autocomplete' => 'off'
-                )
+                ),
+                'label' => 'El. paštas'
             ))
             ->add('roles', ChoiceType::class, array(
                 'mapped' => false,
                 'required' => true,
-                'label'    => 'Vartotojo tipas',
+                'label'    => 'Rolė',
                 'choices' => array(
                     'Klientas' => 'ROLE_USER',
                     'Vadybininkas' => 'ROLE_ADMIN',
                     'Administratorius' => 'ROLE_SUPER_ADMIN',
                 ),
                 'expanded' => true,
-            ))
-            ->add('save', SubmitType::class, array(
-                'label' => 'Submit'
             ));
     }
 

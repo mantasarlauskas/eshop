@@ -15,6 +15,6 @@ class DefaultController extends Controller
      */
     public function indexAction()
     {
-       return $this->redirectToRoute('product.list');
+        return $this->render('home.html.twig');
     }
 }

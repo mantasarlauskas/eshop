@@ -18,20 +18,20 @@ class ProductType extends AbstractType
             ->add('name', TextType::class, array(
                 'attr' => array(
                     'autocomplete' => 'off'
-                )
+                ),
+                'label' => 'Pavadinimas'
             ))
             ->add('price', NumberType::class, array(
                 'attr' => array(
                     'autocomplete' => 'off'
-                )
+                ),
+                'label' => 'Kaina'
             ))
             ->add('count', NumberType::class, array(
                 'attr' => array(
                     'autocomplete' => 'off'
-                )
-            ))
-            ->add('save', SubmitType::class, array(
-                'label' => 'Submit'
+                ),
+                'label' => 'Kiekis'
             ));
     }
 

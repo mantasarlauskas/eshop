@@ -11,7 +11,9 @@
                 <th scope="col">Vnt. kaina</th>
                 <th scope="col">Kiekis</th>
                 <th scope="col">Bendra kaina</th>
-                <th scope="col">Mažinti kiekį</th>
+                {% if is_granted("ROLE_ADMIN") %}
+                    <th scope="col">Mažinti kiekį</th>
+                {% endif %}
             </tr>
             </thead>
             {% for cart in products %}
@@ -21,11 +23,13 @@
                     <td>{{ cart.productPrice }}</td>
                     <td>{{ cart.count }}</td>
                     <td>{{ cart.count * cart.productPrice }}</td>
-                    <td>
-                        <a href="{{ path('order.edit', { 'id': cart.id }) }}">
-                            <i class="fa fa-minus-circle" aria-hidden="true"></i>
-                        </a>
-                    </td>
+                    {% if is_granted("ROLE_ADMIN") %}
+                        <td>
+                            <a href="{{ path('order.edit', { 'id': cart.id }) }}">
+                                <i class="fa fa-minus-circle" aria-hidden="true"></i>
+                            </a>
+                        </td>
+                    {% endif %}
                 </tr>
             {% endfor %}
         </table>

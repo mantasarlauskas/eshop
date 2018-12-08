@@ -1,11 +1,11 @@
 {% trans_default_domain 'FOSUserBundle' %}
 {% form_theme form 'bootstrap_4_layout.html.twig' %}
 <div class="auth-wrapper">
-    <h3 class="text-center">Kliento registracija</h3>
+    <h3 class="text-center mb-3">Registracija</h3>
     {{ form_start(form, {'method': 'post', 'action': path('fos_user_registration_register'), 'attr': {'class': 'fos_user_registration_register'}}) }}
     {{ form_widget(form) }}
-    <div>
-        <input class="btn btn-primary" type="submit" value="{{ 'registration.submit'|trans }}" />
+    <div class="text-center mt-3">
+        <input class="btn btn-primary" type="submit" value="Patvirtinti" />
     </div>
     {{ form_end(form) }}
 </div>

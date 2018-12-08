@@ -14,6 +14,7 @@
                     <th scope="col">Statusas</th>
                     <th scope="col"></th>
                     <th scope="col"></th>
+                    <th scope="col">Šalinti</th>
                 </tr>
                 </thead>
                 {% for order in orders %}
@@ -35,15 +36,20 @@
                             </a>
                         </td>
                         <td>
-                            {% if order.isConfirmed == false and order.isAccepted == false and is_granted("ROLE_ADMIN") %}
+                            {% if order.isConfirmed == false and order.isAccepted == false %}
                                 <a href="{{ path('order.activate', { 'id': order.id }) }}">
                                     Patvirtinti
                                 </a>
-                            {% elseif order.isConfirmed == false and order.isAccepted == true and is_granted("ROLE_ADMIN") %}
+                            {% elseif order.isConfirmed == false and order.isAccepted == true %}
                                 <a href="{{ path('order.finish', { 'id': order.id }) }}">
                                     Užbaigti
                                 </a>
                             {% endif %}
+                        </td>
+                        <td>
+                            <a href="{{ path('order.all.remove', { 'id': order.id }) }}">
+                                <i class="fa fa-remove" aria-hidden="true"></i>
+                            </a>
                         </td>
                     </tr>
                 {% endfor %}

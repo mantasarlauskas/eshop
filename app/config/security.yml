@@ -32,3 +32,9 @@ security:
         - { path: ^/cart/list, role: ROLE_USER }
         - { path: ^/order/list, role: ROLE_USER }
         - { path: ^/order/all, role: ROLE_ADMIN }
+        - { path: ^/product/add, role: ROLE_SUPER_ADMIN }
+        - { path: ^/product/edit, role: ROLE_SUPER_ADMIN }
+        - { path: ^/user/list, role: ROLE_ADMIN }
+        - { path: ^/user/add, role: ROLE_ADMIN }
+        - { path: ^/user/edit, role: ROLE_ADMIN }
+        - { path: ^/report/list, role: ROLE_ADMIN }

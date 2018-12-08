@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container-fluid">
+        <h2 class="text-center page-title">Užsakymų ataskaita</h2>
+        {% if logs|length == 0 %}
+            <p>Ataskaitoje duomenų nėra</p>
+        {% else %}
+            <table class="table">
+                <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Data</th>
+                    <th scope="col">Vartotojas</th>
+                    <th scope="col">Veiksmas</th>
+                </tr>
+                </thead>
+                {% for log in logs %}
+                    <tr>
+                        <th scope="row">{{ loop.index }}</th>
+                        <td>{{ log.dateTime|date('Y-m-d H:i')}}</td>
+                        <td>{{ log.user }}</td>
+                        <td>{{ log.text }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+        {% endif %}
+    </div>
+{% endblock %}

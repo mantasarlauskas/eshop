@@ -21,19 +21,24 @@ class User extends BaseUser
     protected $id;
 
     /**
-     * @ORM\OneToMany(targetEntity="Cart", mappedBy="user")
+     * @ORM\OneToMany(targetEntity="Cart", mappedBy="user",cascade={"persist", "remove"})
      */
     private $products;
 
     /**
-     * @ORM\OneToMany(targetEntity="Orders", mappedBy="user")
+     * @ORM\OneToMany(targetEntity="Orders", mappedBy="user", cascade={"persist", "remove"})
      */
     private $orders;
 
     /**
-     * @ORM\OneToMany(targetEntity="Orders", mappedBy="admin")
+     * @ORM\OneToMany(targetEntity="Orders", mappedBy="admin", cascade={"persist", "remove"})
      */
     private $approvedOrders;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Report", mappedBy="user", cascade={"persist", "remove"})
+     */
+    private $logs;
 
     public function __construct()
     {
@@ -43,6 +48,7 @@ class User extends BaseUser
         $this->products = new ArrayCollection();
         $this->orders = new ArrayCollection();
         $this->approvedOrders = new ArrayCollection();
+        $this->logs = new ArrayCollection();
     }
 
     public function getProducts()

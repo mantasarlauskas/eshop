@@ -24,14 +24,18 @@ class RegistrationType extends AbstractType
             ->add('username', TextType::class, array(
                 'attr' => array(
                     'autocomplete' => 'off'
-                )
+                ),
+                'label' => 'Vartotojo vardas'
             ))
             ->add('email', EmailType::class, array(
                 'attr' => array(
                     'autocomplete' => 'off'
-                )
+                ),
+                'label' => 'El. paštas'
             ))
-            ->add('password', PasswordType::class)
+            ->add('password', PasswordType::class, array(
+                'label' => 'Slaptažodis'
+            ))
             ->add('roles', ChoiceType::class, array(
                 'mapped' => false,
                 'required' => true,
@@ -42,9 +46,6 @@ class RegistrationType extends AbstractType
                     'Administratorius' => 'ROLE_SUPER_ADMIN',
                 ),
                 'expanded' => true,
-            ))
-            ->add('save', SubmitType::class, array(
-                'label' => 'Submit'
             ));
     }
 
