@@ -20,7 +20,7 @@ class Orders
     private $id;
 
     /**
-     * @ORM\OneToMany(targetEntity="Cart", mappedBy="order")
+     * @ORM\OneToMany(targetEntity="Cart", mappedBy="order", cascade={"persist", "remove"})
      */
     private $items;
 
@@ -30,9 +30,19 @@ class Orders
     private $user;
 
     /**
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="approvedOrders")
+     */
+    private $admin;
+
+    /**
      * @ORM\Column(type="datetime")
      */
     private $dateTime;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $isAccepted;
 
     /**
      * @ORM\Column(type="boolean")
@@ -46,6 +56,7 @@ class Orders
     {
         $this->items = new ArrayCollection();
         $this->isConfirmed = false;
+        $this->isAccepted = false;
     }
 
     public function getId()
@@ -61,6 +72,16 @@ class Orders
     public function setIsConfirmed($isConfirmed)
     {
         $this->isConfirmed = $isConfirmed;
+    }
+
+    public function getIsAccepted()
+    {
+        return $this->isAccepted;
+    }
+
+    public function setIsAccepted($isAccepted)
+    {
+        $this->isAccepted = $isAccepted;
     }
 
     public function setDateTime()
@@ -81,6 +102,16 @@ class Orders
     public function setUser(User $user)
     {
         $this->user = $user;
+    }
+
+    public function getAdmin()
+    {
+        return $this->admin;
+    }
+
+    public function setAdmin(User $admin)
+    {
+        $this->admin = $admin;
     }
 
     public function addItem(Cart $item)

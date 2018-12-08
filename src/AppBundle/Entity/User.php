@@ -30,12 +30,19 @@ class User extends BaseUser
      */
     private $orders;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Orders", mappedBy="admin")
+     */
+    private $approvedOrders;
+
     public function __construct()
     {
         parent::__construct();
 
+        $this->roles = array('ROLE_USER');
         $this->products = new ArrayCollection();
         $this->orders = new ArrayCollection();
+        $this->approvedOrders = new ArrayCollection();
     }
 
     public function getProducts()

@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container-fluid">
+        <h2 class="text-center page-title">Užsakymo prekės</h2>
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Pavadinimas</th>
+                <th scope="col">Vnt. kaina</th>
+                <th scope="col">Kiekis</th>
+                <th scope="col">Bendra kaina</th>
+                <th scope="col">Mažinti kiekį</th>
+            </tr>
+            </thead>
+            {% for cart in products %}
+                <tr>
+                    <th scope="row">{{ loop.index }}</th>
+                    <td>{{ cart.productTitle }}</td>
+                    <td>{{ cart.productPrice }}</td>
+                    <td>{{ cart.count }}</td>
+                    <td>{{ cart.count * cart.productPrice }}</td>
+                    <td>
+                        <a href="{{ path('order.edit', { 'id': cart.id }) }}">
+                            <i class="fa fa-minus-circle" aria-hidden="true"></i>
+                        </a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+{% endblock %}

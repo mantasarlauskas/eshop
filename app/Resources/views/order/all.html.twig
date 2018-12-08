@@ -13,7 +13,7 @@
                     <th scope="col">Data</th>
                     <th scope="col">Statusas</th>
                     <th scope="col"></th>
-                    <th scope="col">Šalinti</th>
+                    <th scope="col"></th>
                 </tr>
                 </thead>
                 {% for order in orders %}
@@ -35,9 +35,15 @@
                             </a>
                         </td>
                         <td>
-                            <a href="{{ path('order.remove', { 'id': order.id }) }}">
-                                <i class="fa fa-remove" aria-hidden="true"></i>
-                            </a>
+                            {% if order.isConfirmed == false and order.isAccepted == false and is_granted("ROLE_ADMIN") %}
+                                <a href="{{ path('order.activate', { 'id': order.id }) }}">
+                                    Patvirtinti
+                                </a>
+                            {% elseif order.isConfirmed == false and order.isAccepted == true and is_granted("ROLE_ADMIN") %}
+                                <a href="{{ path('order.finish', { 'id': order.id }) }}">
+                                    Užbaigti
+                                </a>
+                            {% endif %}
                         </td>
                     </tr>
                 {% endfor %}

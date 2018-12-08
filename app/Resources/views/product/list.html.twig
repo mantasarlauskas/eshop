@@ -2,40 +2,66 @@
 
 {% block body %}
     <div class="container-fluid">
-        {% for message in app.flashes('create_product') %}
+        {% for message in app.flashes('form_product') %}
             <div class="alert alert-success">
                 {{ message }}
             </div>
         {% endfor %}
-        <h2 class="text-center page-title">Prekių sąrašas</h2>
-        <a class="btn btn-primary add-button" href="{{ path('product.add') }}">
-            Pridėti prekę
-        </a>
-        <table class="table">
-            <thead>
-            <tr>
-                <th scope="col">#</th>
-                <th scope="col">Pavadinimas</th>
-                <th scope="col">Kaina</th>
-                <th scope="col">Likes kiekis</th>
-                <th scope="col">Pridėti į krepšelį</th>
-            </tr>
-            </thead>
-            {% for product in products %}
+        <div class="clearfix">
+            <h2 class="text-center page-title">Prekių sąrašas</h2>
+            {% if is_granted("ROLE_SUPER_ADMIN") %}
+                <a class="btn btn-primary add-button" href="{{ path('product.add') }}">
+                    Pridėti prekę
+                </a>
+            {% endif %}
+        </div>
+        {% if products|length == 0 %}
+            <p>Prekių kol kas nėra</p>
+        {% else %}
+            <table class="table">
+                <thead>
                 <tr>
-                    <th scope="row">{{ loop.index }}</th>
-                    <td>{{ product.name }}</td>
-                    <td>{{ product.price }}</td>
-                    <td>{{ product.count }}</td>
-                    <td>
-                        {% if product.count > 0 %}
-                            <a href="{{ path('product.cart', {'id': product.id}) }}">
-                                <i class="fa fa-cart-plus" aria-hidden="true"></i>
-                            </a>
-                        {% endif %}
-                    </td>
+                    <th scope="col">#</th>
+                    <th scope="col">Pavadinimas</th>
+                    <th scope="col">Kaina</th>
+                    <th scope="col">Likes kiekis</th>
+                    {% if is_granted("ROLE_USER") %}
+                        <th scope="col">Pridėti į krepšelį</th>
+                    {% endif %}
+                    {% if is_granted("ROLE_SUPER_ADMIN") %}
+                        <th scope="col">Redaguoti</th>
+                        <th scope="col">Šalinti</th>
+                    {% endif %}
                 </tr>
-            {% endfor %}
-        </table>
+                </thead>
+                {% for product in products %}
+                    <tr>
+                        <th scope="row">{{ loop.index }}</th>
+                        <td>{{ product.name }}</td>
+                        <td>{{ product.price }}</td>
+                        <td>{{ product.count }}</td>
+                        <td>
+                            {% if product.count > 0 and is_granted("ROLE_USER") %}
+                                <a href="{{ path('product.cart', {'id': product.id}) }}">
+                                    <i class="fa fa-cart-plus" aria-hidden="true"></i>
+                                </a>
+                            {% endif %}
+                        </td>
+                        {% if is_granted("ROLE_SUPER_ADMIN") %}
+                            <td>
+                                <a href="{{ path('product.edit', { 'id': product.id }) }}">
+                                    <i class="fa fa-edit" aria-hidden="true"></i>
+                                </a>
+                            </td>
+                            <td>
+                                <a href="{{ path('product.remove', { 'id': product.id }) }}">
+                                    <i class="fa fa-remove" aria-hidden="true"></i>
+                                </a>
+                            </td>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+            </table>
+        {% endif %}
     </div>
 {% endblock %}

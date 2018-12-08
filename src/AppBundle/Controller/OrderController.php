@@ -34,6 +34,58 @@ class OrderController extends Controller
     }
 
     /**
+     * @Route("/order/activate/{id}", name="order.activate")
+     * @param Orders $order
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     */
+    public function activateOrder(Orders $order)
+    {
+        $user = $this->getUser();
+
+        $order->setAdmin($user);
+        $order->setIsAccepted(true);
+
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->persist($order);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('order.all');
+    }
+
+    /**
+     * @Route("/order/finish/{id}", name="order.finish")
+     * @param Orders $order
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     */
+    public function finishOrder(Orders $order)
+    {
+        $user = $this->getUser();
+
+        $order->setAdmin($user);
+        $order->setIsConfirmed(true);
+
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->persist($order);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('order.all');
+    }
+
+    /**
+     * @Route("/order/all", name="order.all")
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function allOrders()
+    {
+        $orders = $this->getDoctrine()->getRepository(Orders::class)
+            ->findAll();
+
+        return $this->render('order/all.html.twig', [
+            'orders' => $orders
+        ]);
+    }
+
+    /**
      * @Route("/order/add", name="order.add")
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
@@ -61,4 +113,71 @@ class OrderController extends Controller
 
         return $this->redirectToRoute('order.list');
     }
+
+    /**
+     * @Route("/order/remove/{id}", name="order.remove")
+     * @param Orders $order
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function removeOrder(Orders $order)
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->remove($order);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('order.list');
+    }
+
+    /**
+     * @Route("/order/edit/{id}", name="order.edit")
+     * @param Cart $cart
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     */
+    public function removeFromOrder(Cart $cart)
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+
+        $order = $this->getDoctrine()->getRepository(Orders::class)->find($cart->getOrder());
+
+        if ($cart->getCount() > 1) {
+            $cart->decrementCount();
+            $entityManager->persist($cart);
+        } else {
+            $entityManager->remove($cart);
+        }
+
+
+        $product = $this->getDoctrine()->getRepository(Product::class)->find($cart->getProduct());
+        $product->incrementCount();
+
+        $entityManager->persist($product);
+        $entityManager->flush();
+
+        $products = $this->getDoctrine()->getRepository(Cart::class)
+            ->findBy(array('order' => $order->getId()));
+        if(count($products) == 0) {
+            $entityManager->remove($order);
+            $entityManager->flush();
+            return $this->redirectToRoute('order.list');
+        }
+
+
+        return $this->redirectToRoute('order.view', array('id' => $order->getId()));
+    }
+
+    /**
+     * @Route("/order/{id}", name="order.view")
+     * @param Orders $order
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function viewOrder(Orders $order)
+    {
+        $products = $this->getDoctrine()->getRepository(Cart::class)
+            ->findBy(array('order' => $order->getId()));
+
+        return $this->render('order/order.html.twig', [
+            'products' => $products
+        ]);
+    }
+
 }

@@ -2,25 +2,58 @@
 
 {% block body %}
     <div class="container-fluid">
-        <h2 class="text-center page-title">Vartotojų sąrašas</h2>
-        <a class="btn btn-primary add-button" href="/user/add">
-            Pridėti vartotoją
-        </a>
-        <table class="table">
-            <thead>
-            <tr>
-                <th scope="col">#</th>
-                <th scope="col">Vartotojo vardas</th>
-                <th scope="col">El. paštas</th>
-            </tr>
-            </thead>
-            {% for user in users %}
+        {% for message in app.flashes('form_user') %}
+            <div class="alert alert-success">
+                {{ message }}
+            </div>
+        {% endfor %}
+        <div class="clearfix">
+            <h2 class="text-center page-title">Vartotojų sąrašas</h2>
+            <a class="btn btn-primary add-button" href="/user/add">
+                Pridėti vartotoją
+            </a>
+        </div>
+        {% if users|length == 0 %}
+            <p>Vartotojų kol kas nėra</p>
+        {% else %}
+            <table class="table">
+                <thead>
                 <tr>
-                    <th scope="row">{{ loop.index }}</th>
-                    <td>{{ user.username }}</td>
-                    <td>{{ user.email }}</td>
+                    <th scope="col">#</th>
+                    <th scope="col">Vartotojo vardas</th>
+                    <th scope="col">Rolė</th>
+                    <th scope="col">El. paštas</th>
+                    <th scope="col">Redaguoti</th>
+                    <th scope="col">Šalinti</th>
                 </tr>
-            {% endfor %}
-        </table>
+                </thead>
+                {% for user in users %}
+                    <tr>
+                        <th scope="row">{{ loop.index }}</th>
+                        <td>{{ user.username }}</td>
+                        <td>
+                            {% if 'ROLE_SUPER_ADMIN' in user.roles %}
+                                Administratorius
+                            {% elseif 'ROLE_ADMIN' in user.roles %}
+                                Vadybininkas
+                            {% else %}
+                                Klientas
+                            {% endif %}
+                        </td>
+                        <td>{{ user.email }}</td>
+                        <td>
+                            <a href="{{ path('user.edit', { 'id': user.id }) }}">
+                                <i class="fa fa-edit" aria-hidden="true"></i>
+                            </a>
+                        </td>
+                        <td>
+                            <a href="{{ path('user.remove', { 'id': user.id }) }}">
+                                <i class="fa fa-remove" aria-hidden="true"></i>
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+        {% endif %}
     </div>
 {% endblock %}

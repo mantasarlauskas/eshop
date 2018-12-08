@@ -9,18 +9,30 @@
             <li class="nav-item">
                 <a class="nav-link" href={{ path('product.list') }}>Prekės</a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" href={{ path('user.list') }}>Vartotojai</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href={{ path('cart.list') }}>Krepšelis</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href={{ path('order.list') }}>Užsakymai</a>
-            </li>
+            {% if is_granted("ROLE_USER") %}
+                <li class="nav-item">
+                    <a class="nav-link" href={{ path('cart.list') }}>Krepšelis</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href={{ path('order.list') }}>Mano užsakymai</a>
+                </li>
+            {% endif %}
+            {% if is_granted("ROLE_ADMIN") %}
+                <li class="nav-item">
+                    <a class="nav-link" href={{ path('user.list') }}>Vartotojai</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href={{ path('order.all') }}>Užsakymai</a>
+                </li>
+            {% endif %}
         </ul>
         <div class="form-inline my-2 my-lg-0">
             {% if is_granted('ROLE_USER') %}
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/profile">Mano profilis</a>
+                    </li>
+                </ul>
                 <a class="btn btn-secondary" href="{{ path('fos_user_security_logout') }}">Logout</a>
             {% else %}
                 <a class="btn btn-secondary" href="{{ path('fos_user_security_login') }}">Login</a>

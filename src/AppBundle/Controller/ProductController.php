@@ -30,16 +30,65 @@ class ProductController extends Controller
             $entityManager->flush();
 
             $this->addFlash(
-                'create_product',
+                'form_product',
                 'Produktas buvo sėkmingai pridėtas'
             );
 
             return $this->redirectToRoute('product.list');
         }
 
-        return $this->render('product/create.html.twig', [
+        return $this->render('product/form.html.twig', [
             'form' => $form->createView(),
         ]);
+    }
+
+    /**
+     * @Route("/product/edit/{id}", name="product.edit")
+     * @param Request $request
+     * @param Product $product
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     */
+    public function editProduct(Request $request, Product $product)
+    {
+        $form = $this->createForm(ProductType::class, $product);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($product);
+            $entityManager->flush();
+
+            $this->addFlash(
+                'form_product',
+                'Produktas buvo sėkmingai pakeistas'
+            );
+
+            return $this->redirectToRoute('product.list');
+        }
+
+        return $this->render('product/form.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @Route("/product/remove/{id}", name="product.remove")
+     * @param Product $product
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     */
+    public function removeProduct(Product $product)
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->remove($product);
+        $entityManager->flush();
+
+        $this->addFlash(
+            'form_product',
+            'Produktas buvo sėkmingai pašalintas'
+        );
+
+        return $this->redirectToRoute('product.list');
     }
 
     /**

@@ -31,7 +31,7 @@ class Product
     private $price;
 
     /**
-     * @ORM\OneToMany(targetEntity="Cart", mappedBy="product")
+     * @ORM\OneToMany(targetEntity="Cart", mappedBy="product", cascade={"persist", "remove"})
      */
     private $users;
 
